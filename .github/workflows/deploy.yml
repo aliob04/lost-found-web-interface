@@ -19,6 +19,8 @@ jobs:
 
       - name: Deploy
         run: |
+                - name: Deploy
+        run: |
           gcloud run deploy web-interface \
             --source . \
             --region us-central1 \
