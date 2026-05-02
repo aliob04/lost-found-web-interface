@@ -23,5 +23,6 @@ jobs:
             --source . \
             --region us-central1 \
             --allow-unauthenticated \
+            --set-env-vars ITEM_URL=https://lost-found-item-service-512993707354.us-central1.run.app,SEARCH_URL=https://search-service-512993707354.us-central1.run.app,AUTH_URL=https://auth-service-512993707354.us-central1.run.app,GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
             --set-env-vars ITEM_URL=https://lost-found-item-service-512993707354.us-central1.run.app,SEARCH_URL=https://search-service-512993707354.us-central1.run.app,AUTH_URL=https://auth-service-512993707354.us-central1.run.app \
             --quiet
