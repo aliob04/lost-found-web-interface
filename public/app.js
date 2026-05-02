@@ -82,15 +82,30 @@ function render(items, id) {
   const el = document.getElementById(id);
 
   if (!items.length) {
-    el.innerHTML = "No items";
+    el.innerHTML = '<p class="empty-msg">No items found.</p>';
     return;
   }
 
-  el.innerHTML = items.map(i => `
-    <div class="item-card">
-      <h3>${i.title}</h3>
-      <p>${i.description}</p>
-      <p>${i.location}</p>
-    </div>
-  `).join("");
+  el.innerHTML = items.map(i => {
+    const typeBadge = i.type === "lost"
+      ? '<span class="badge badge-lost">Lost</span>'
+      : '<span class="badge badge-found">Found</span>';
+    const category = i.category ? `<span class="card-meta-item">🏷 ${i.category}</span>` : "";
+    const location  = i.location  ? `<span class="card-meta-item">📍 ${i.location}</span>`  : "";
+    const desc = i.description || "No description provided.";
+
+    return `
+      <div class="item-card">
+        <div class="card-top">
+          ${typeBadge}
+          <h3 class="card-title">${i.title}</h3>
+        </div>
+        <p class="card-desc">${desc}</p>
+        <div class="card-meta">
+          ${category}
+          ${location}
+        </div>
+      </div>
+    `;
+  }).join("");
 }
