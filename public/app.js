@@ -13,15 +13,36 @@ function showSection(id, btn) {
     btn.classList.add("active");
   }
 }
+let currentUserEmail = "";
 
+async function handleGoogleLogin(response) {
+  const res = await fetch("/api/google-login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ credential: response.credential })
+  });
+
+  const user = await res.json();
+  currentUserEmail = user.email;
+
+  document.getElementById("loggedInUser").textContent =
+    `Logged in as ${user.name} (${user.email})`;
+
+  document.getElementById("contact").value = user.email;
+}
 async function submitItem() {
+  if (!currentUserEmail) {
+    alert("Please sign in with Google first.");
+    showSection("loginSection");
+  return;
+  }
   const item = {
     type: document.getElementById("type").value,
     title: document.getElementById("title").value,
     description: document.getElementById("description").value,
     category: document.getElementById("category").value,
     location: document.getElementById("location").value,
-    contact: document.getElementById("contact").value
+    contact: currentUserEmail
   };
 
   try {
@@ -93,6 +114,26 @@ function renderItems(items) {
     </div>
   `).join("");
 }
+
+async function loadLostReports() {
+  const response = await fetch("/api/items?type=lost");
+  const items = await response.json();
+  renderItems(items);
+}
+
+async function loadFoundItems() {
+  const response = await fetch("/api/items?type=found");
+  const items = await response.json();
+  renderItems(items);
+}
+
+async function searchFoundItems() {
+  const q = document.getElementById("searchQuery").value;
+  const response = await fetch(`/api/search?q=${encodeURIComponent(q)}&type=found`);
+  const items = await response.json();
+  renderItems(items);
+}
+
 
 async function login() {
   const email = document.getElementById("email").value;

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lost & Found · KFUPM Recovery System</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <div class="app">
@@ -88,11 +89,24 @@
       </section>
 
       <section id="loginSection" class="panel section hidden">
-        <h3>Login Demo</h3>
+<h3>Google Login</h3>
 
-        <div class="login-form">
-          <input id="email" placeholder="username@kfupm.edu.sa" />
-          <button class="primary" onclick="login()">Login</button>
+<div id="g_id_onload"
+     data-client_id="512993707354-compute@developer.gserviceaccount.com"
+     data-callback="handleGoogleLogin">
+</div>
+
+<div class="g_id_signin"
+     data-type="standard"
+     data-size="large"
+     data-theme="outline"
+     data-text="sign_in_with"
+     data-shape="rectangular">
+</div>
+
+<p id="loggedInUser"></p>
+
+<pre id="loginResult"></pre>
         </div>
 
         <pre id="loginResult"></pre>

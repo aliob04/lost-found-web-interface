@@ -1,6 +1,7 @@
 const { OAuth2Client } = require("google-auth-library");
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 require("dotenv").config();
+
 const express = require("express");
 
 const app = express();
@@ -55,7 +56,27 @@ app.get("/api/search", async (req, res) => {
   const data = await response.json();
   res.json(data);
 });
+app.post("/api/google-login", async (req, res) => {
+  try {
+    const { credential } = req.body;
 
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+
+    const payload = ticket.getPayload();
+
+    res.json({
+      email: payload.email,
+      name: payload.name,
+      picture: payload.picture
+    });
+  } catch (error) {
+    console.error("Google login failed:", error);
+    res.status(401).json({ error: "Google login failed" });
+  }
+});
 app.post("/api/login", async (req, res) => {
   const response = await fetch(`${AUTH_URL}/login`, {
     method: "POST",
